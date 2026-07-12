@@ -1,1 +1,11 @@
-
+fastapi
+uvicorn[standard]
+langgraph
+langchain-openai
+langchain-core
+chromadb
+openai
+python-dotenv
+httpx
+pytest
+pytest-asyncio
