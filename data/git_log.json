@@ -1,1 +1,56 @@
-
+[
+    {
+      "hash": "a3f8c21",
+      "author": "sarah.chen",
+      "timestamp": "2026-07-11T14:32:00Z",
+      "message": "feat: add user preference caching layer",
+      "files_changed": ["src/cache/user_cache.py", "src/api/user_routes.py"],
+      "diff_summary": "Added Redis caching for user preferences. Cache TTL set to 3600s.",
+      "service": "user-service"
+    },
+    {
+      "hash": "b7d2e19",
+      "author": "marcus.johnson",
+      "timestamp": "2026-07-11T15:45:00Z",
+      "message": "quick fix prod db timeout",
+      "files_changed": ["src/db/connection.py", "config/database.yml"],
+      "diff_summary": "Changed db connection pool size from 20 to 5. Reduced timeout from 30s to 5s.",
+      "service": "checkout-service"
+    },
+    {
+      "hash": "c9a4f33",
+      "author": "priya.patel",
+      "timestamp": "2026-07-11T16:10:00Z",
+      "message": "update checkout flow for new payment provider",
+      "files_changed": ["src/payments/processor.py", "src/api/checkout_routes.py"],
+      "diff_summary": "Integrated new payment provider SDK. Removed error handling for timeout exceptions.",
+      "service": "checkout-service"
+    },
+    {
+      "hash": "d1b6a77",
+      "author": "alex.torres",
+      "timestamp": "2026-07-11T16:55:00Z",
+      "message": "refactor: clean up legacy auth middleware",
+      "files_changed": ["src/middleware/auth.py"],
+      "diff_summary": "Removed deprecated auth token validation fallback.",
+      "service": "auth-service"
+    },
+    {
+      "hash": "e5c8b44",
+      "author": "sarah.chen",
+      "timestamp": "2026-07-11T17:20:00Z",
+      "message": "chore: update logging configuration",
+      "files_changed": ["config/logging.yml"],
+      "diff_summary": "Changed log level from INFO to DEBUG for payment service.",
+      "service": "checkout-service"
+    },
+    {
+      "hash": "f2d9c55",
+      "author": "marcus.johnson",
+      "timestamp": "2026-07-11T18:05:00Z",
+      "message": "hotfix: emergency memory config change",
+      "files_changed": ["config/app.yml", "src/api/middleware.py"],
+      "diff_summary": "Disabled memory profiler. Increased worker thread count to 128.",
+      "service": "api-gateway"
+    }
+  ]
