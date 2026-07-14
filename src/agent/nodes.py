@@ -44,8 +44,8 @@ def search_git_logs(state: SREAgentState) -> dict:
 
     try:
         commits = get_recent_commits(
-            service_name=state["service_name"],
-            alert_timestamp=state["alert_timestamp"],   # temporal fix
+            service_name=state["service_name"] or "unknown",
+            alert_timestamp=state["alert_timestamp"],   # temporal fix # type: ignore
             hours_back=2,
         )
 
@@ -128,9 +128,9 @@ def estimate_impact_node(state: SREAgentState) -> dict:
     error_rate = alert.get("error_rate", 0.1)
 
     result = estimate_impact(
-        service_name=state["service_name"],
+        service_name=state["service_name"], # type: ignore
         error_rate=error_rate,
-        severity=state["severity"],
+        severity=state["severity"], # type: ignore
     )
 
     print(f"[estimate_impact] ~{result['estimated_users_affected']:,} users affected")
@@ -148,7 +148,7 @@ def post_slack_brief_node(state: SREAgentState) -> dict:
     """
     print("[post_slack_brief] Formatting and posting Slack brief")
 
-    brief   = format_incident_brief(state)
+    brief   = format_incident_brief(state) # type: ignore
     success = post_to_slack(brief)
 
     return {

@@ -14,11 +14,8 @@ def get_recent_commits(
     Read mock git log and return commits for the given service within
     `hours_back` hours BEFORE the alert fired.
 
-    IMPORTANT: anchors to alert_timestamp, not datetime.now().
-    If we used datetime.now(), the hardcoded timestamps in git_log.json
-    would fall outside the window the moment you run this days later.
-    Anchoring to the alert timestamp makes this deterministic regardless
-    of when you run the project.
+    Anchors to alert_timestamp, not datetime.now() — this makes the
+    project work correctly on any date, not just the day you wrote it.
     """
     git_log_path = Path("data/git_log.json")
     if not git_log_path.exists():
@@ -27,7 +24,6 @@ def get_recent_commits(
     with open(git_log_path, "r") as f:
         all_commits = json.load(f)
 
-    # anchor to the alert's timestamp, not current clock
     alert_time = datetime.fromisoformat(
         alert_timestamp.replace("Z", "+00:00")
     )
@@ -54,22 +50,21 @@ def analyze_commits_with_llm(
     Use GPT-4o-mini to reason about which commits are likely root causes
     of the active incident.
 
-    For each commit, the LLM reads the diff summary and alert description
-    together and decides: is this commit suspicious? Why?
+    For each commit, the LLM reads the diff summary alongside the alert
+    description and decides: is this suspicious? How confident? Why?
 
-    This is what makes the agent genuinely AI-powered rather than just a
-    Python script with a hardcoded flag. The LLM applies SRE reasoning to
-    unstructured code change descriptions.
+    This is what makes the agent genuinely AI-powered. No hardcoded flags —
+    the LLM applies actual SRE reasoning to unstructured code change text.
 
     Returns the same list of commits with three new fields added:
-        - is_suspicious: bool
-        - confidence: float (0.0 to 1.0)
-        - reason: str (one-sentence SRE explanation)
+        is_suspicious: bool
+        confidence:    float 0.0 to 1.0
+        reason:        str one-sentence SRE explanation
     """
     if not commits:
         return []
 
-    client = OpenAI(api_key=config.OPENAI_API_KEY)
+    client   = OpenAI(api_key=config.OPENAI_API_KEY)
     analyzed = []
 
     for commit in commits:
@@ -104,17 +99,12 @@ Respond with ONLY a JSON object in this exact format:
                 temperature=0,
                 response_format={"type": "json_object"},
             )
-            content = response.choices[0].message.content
-            analysis = json.loads(content) if content else {
-                "is_suspicious": False,
-                "confidence": 0.0,
-                "reason": "No content returned from the response."
-            }
+            analysis = json.loads(response.choices[0].message.content) # type: ignore
         except Exception as e:
             analysis = {
                 "is_suspicious": False,
-                "confidence": 0.0,
-                "reason": f"Analysis failed: {str(e)}",
+                "confidence":    0.0,
+                "reason":        f"Analysis failed: {str(e)}",
             }
 
         commit["is_suspicious"] = analysis.get("is_suspicious", False)
@@ -131,7 +121,7 @@ def identify_suspicious_commits(commits: list[dict]) -> list[dict]:
 
 
 def format_commits_for_display(commits: list[dict]) -> str:
-    """Format commits for readable output."""
+    """Format commits into readable text for logging."""
     if not commits:
         return "No recent commits found."
     lines = []
