@@ -1,1 +1,22 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - chromadb
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
 
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+volumes:
+  chroma_data:
