@@ -79,21 +79,21 @@ Everything runs in a fully self-contained Docker environment. No real PagerDuty 
 
 **Slack brief (excerpt):**
 ```
-🚨 INCIDENT ALERT — CRITICAL
+INCIDENT ALERT — CRITICAL
 
 Service: checkout-service
 Error Type: Database connection pool exhausted
 Detected: 2026-07-11T17:30:00Z
 
-📊 Impact Assessment
+Impact Assessment
 Approximately 20,250 users affected (45% of traffic). 540 requests/min
 failing. Complete service outage. Revenue impact active.
 
-🔍 Likely Root Cause (AI Analysis)
+Likely Root Cause (AI Analysis)
 • [c9a4f33] by priya.patel (confidence: 85%)
 • [b7d2e19] by marcus.johnson (confidence: 90%)
 
-📖 Recommended Runbook: Db Connection Pool
+Recommended Runbook: Db Connection Pool
 ```
 
 ---
